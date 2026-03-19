@@ -16,7 +16,7 @@ spec:
           urlRewrite:
             path:
               type: ReplacePrefixMatch
-              replacePrefixMatch: /cart
+              replacePrefixMatch: /
       backendRefs:
         - name: ey
           port: 3001               
