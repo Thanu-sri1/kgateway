@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fitness-app
+  namespace: thanu-ns
+spec: 
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 2
+      maxSurge: 2
+  selector: 
+    matchLabels:
+      app: fit
+  template:
+    metadata:
+      labels:
+        app: fit
+    spec: 
+      containers:
+        - name: fitness-container
+          image: muralisocial123/fitness-app:v1.0.1
+          ports:
+            - containerPort: 5000
+          resources:
+            requests:
+              memory: "128Mi"  
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "265m"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-service
+  namespace: thanu-ns
+spec:
+  selector:
+    app: fit
+  ports:  
+      port: 5000
+      targetPort: 5000
+  type: ClusterIP
+           
+

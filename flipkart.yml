@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ey-cart
+  namespace: thanu-ns
+spec: 
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 2
+      maxSurge: 2
+  selector: 
+    matchLabels:
+      app: flipkart-app
+  template:
+    metadata:
+      labels:
+        app: flipkart-app
+    spec: 
+      containers:
+        - name: fitness-container
+          image: muralisocial123/flipkart-clone-kuberox:v1.1.0 
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              memory: "128Mi"  
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "265m"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ey
+  namespace: thanu-ns
+spec:
+  selector:
+    app: flipkart-app
+  ports:  
+      port: 80
+      targetPort: 80
+  type: ClusterIP
+           
+

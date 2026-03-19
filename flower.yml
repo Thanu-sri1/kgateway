@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flower-app
+  namespace: thanu-ns
+spec: 
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 2
+      maxSurge: 2
+  selector: 
+    matchLabels:
+      app: flower
+  template:
+    metadata:
+      labels:
+        app: flower
+    spec: 
+      containers:
+        - name: fitness-container
+          image: muralisocial123/kyndrl-flower-app:v1.1.0 
+          ports:
+            - containerPort: 3015
+          resources:
+            requests:
+              memory: "128Mi"  
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "265m"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: flower-kyndrl
+  namespace: thanu-ns
+spec:
+  selector:
+    app: flower
+  ports:  
+      port: 3015
+      targetPort: 3015
+  type: ClusterIP
+           
+

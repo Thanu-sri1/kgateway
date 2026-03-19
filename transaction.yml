@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: transaction-app
+  namespace: thanu-ns
+spec: 
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 2
+      maxSurge: 2
+  selector: 
+    matchLabels:
+      app: transaction
+  template:
+    metadata:
+      labels:
+        app: transaction
+    spec: 
+      containers:
+        - name: fitness-container
+          image: muralisocial123/transaction-app:v1.0.0 
+          ports:
+            - containerPort: 3000
+          resources:
+            requests:
+              memory: "128Mi"  
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "265m"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: trans
+  namespace: thanu-ns
+spec:
+  selector:
+    app: transaction
+  ports:  
+      port: 3000
+      targetPort: 3000
+  type: ClusterIP
+           
+
